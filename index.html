@@ -1350,6 +1350,22 @@
             showSavedList();
         }
 
+        function doDeleteCustom(sitId, category) {
+            alert('מוחק...');
+            if (customSituations[category]) {
+                customSituations[category] = customSituations[category].filter(function(s) {
+                    return s.id !== sitId;
+                });
+                localStorage.setItem('faithSimCustom', JSON.stringify(customSituations));
+            }
+            if (situationsDB[category]) {
+                situationsDB[category] = situationsDB[category].filter(function(s) {
+                    return s.id !== sitId;
+                });
+            }
+            showSituationsList(category);
+        }
+
         // Trained situations list (auto-saved after each training)
         var trainedSituations = [];
 
@@ -2314,69 +2330,36 @@
         }
 
         function showSituationsList(category) {
-            const situations = situationsDB[category];
-            situationsList.innerHTML = '';
+            var situations = situationsDB[category];
+            var html = '';
             
-            situations.forEach(function(sit, index) {
-                var isCompleted = completedSituations.includes(sit.id);
+            for (var i = 0; i < situations.length; i++) {
+                var sit = situations[i];
+                var isCompleted = completedSituations.indexOf(sit.id) !== -1;
                 var isSaved = savedSituations.some(function(s) { return s.id === sit.id; });
                 var isCustom = sit.isCustom;
                 
-                var item = document.createElement('div');
-                item.className = 'situation-item' + (isCompleted ? ' completed' : '') + (isCustom ? ' custom' : '');
-                
-                var titleDiv = document.createElement('div');
-                titleDiv.className = 'item-title';
-                titleDiv.textContent = (isCompleted ? '✅ ' : '') + (isSaved ? '💾 ' : '') + (isCustom ? '⭐ ' : '') + sit.title;
-                
-                var previewDiv = document.createElement('div');
-                previewDiv.className = 'item-preview';
-                previewDiv.textContent = sit.desc;
-                
-                item.appendChild(titleDiv);
-                item.appendChild(previewDiv);
-                
+                html += '<div class="situation-item' + (isCompleted ? ' completed' : '') + (isCustom ? ' custom' : '') + '" onclick="selectSituationByIndex(' + i + ', \'' + category + '\')">';
+                html += '<div class="item-title">' + (isCompleted ? '✅ ' : '') + (isSaved ? '💾 ' : '') + (isCustom ? '⭐ ' : '') + sit.title + '</div>';
+                html += '<div class="item-preview">' + sit.desc + '</div>';
                 if (isCustom) {
-                    var deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'delete-custom-btn';
-                    deleteBtn.textContent = '✕';
-                    item.appendChild(deleteBtn);
-                    
-                    (function(sitId, cat) {
-                        deleteBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            if (confirm('למחוק את המצב שהוספת?')) {
-                                if (customSituations[cat]) {
-                                    customSituations[cat] = customSituations[cat].filter(function(s) {
-                                        return s.id !== sitId;
-                                    });
-                                    saveCustomSituations();
-                                }
-                                if (situationsDB[cat]) {
-                                    situationsDB[cat] = situationsDB[cat].filter(function(s) {
-                                        return s.id !== sitId;
-                                    });
-                                }
-                                showSituationsList(cat);
-                            }
-                        });
-                    })(sit.id, category);
+                    html += '<button class="delete-custom-btn" onclick="event.stopPropagation();doDeleteCustom(\'' + sit.id + '\', \'' + category + '\')">✕</button>';
                 }
-                
-                (function(situation, idx, cat) {
-                    item.addEventListener('click', function(e) {
-                        if (e.target.classList.contains('delete-custom-btn')) return;
-                        selectSituation(situation, idx, cat);
-                    });
-                })(sit, index, category);
-                
-                situationsList.appendChild(item);
-            });
-
+                html += '</div>';
+            }
+            
+            situationsList.innerHTML = html;
             situationsList.classList.add('active');
             characterSection.classList.add('hidden');
             simulationArea.classList.add('hidden');
             progressSection.classList.add('hidden');
+        }
+        
+        function selectSituationByIndex(index, category) {
+            var sit = situationsDB[category][index];
+            if (sit) {
+                selectSituation(sit, index, category);
+            }
         }
 
         function showSavedList() {
@@ -2568,6 +2551,8 @@
         window.selectSavedItem = selectSavedItem;
         window.doDeleteSaved = doDeleteSaved;
         window.doReset = doReset;
+        window.doDeleteCustom = doDeleteCustom;
+        window.selectSituationByIndex = selectSituationByIndex;
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', init);
