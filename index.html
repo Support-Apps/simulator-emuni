@@ -233,20 +233,176 @@
             line-height: 1.6;
         }
 
-        /* Global Reset Section */
-        .global-reset-section {
-            text-align: center;
+        /* Add Button */
+        .add-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, #E8C567 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
             padding: 20px;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--cream);
+            background: linear-gradient(135deg, var(--pink-light) 0%, var(--mint-light) 100%);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text-dark);
+            font-family: 'Secular One', sans-serif;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            padding: 5px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--cream);
+            border-radius: 10px;
+            font-family: 'Heebo', sans-serif;
+            font-size: 1rem;
+            direction: rtl;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--mint);
+        }
+
+        /* Trained List */
+        .trained-list {
             margin-top: 20px;
+            border-top: 2px dashed var(--mint);
+            padding-top: 15px;
         }
 
-        .btn.reset {
-            background: linear-gradient(135deg, #9b8ac4 0%, #8677b0 100%);
-            box-shadow: 0 5px 20px rgba(155, 138, 196, 0.3);
+        .trained-list:empty {
+            display: none;
         }
 
-        .btn.reset:hover {
-            box-shadow: 0 8px 30px rgba(155, 138, 196, 0.4);
+        .trained-list-title {
+            font-family: 'Secular One', sans-serif;
+            color: var(--mint);
+            font-size: 1rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .trained-item {
+            background: linear-gradient(135deg, var(--mint-light) 0%, #E8F5E9 100%);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-right: 4px solid var(--mint);
+        }
+
+        .trained-item-content {
+            flex: 1;
+        }
+
+        .trained-item-title {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .trained-item-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .trained-item-delete {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .trained-item-delete:hover {
+            opacity: 1;
         }
 
         /* View Toggle */
@@ -256,6 +412,7 @@
             gap: 10px;
             padding: 10px;
             border-top: 1px solid var(--cream);
+            flex-wrap: wrap;
         }
 
         .view-btn {
@@ -618,6 +775,37 @@
             color: var(--gold);
         }
 
+        /* Completion Section */
+        .completion-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px dashed var(--gold);
+        }
+
+        .completion-section.hidden {
+            display: none;
+        }
+
+        .completion-message {
+            background: linear-gradient(135deg, var(--mint-light), var(--gold-light));
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .completion-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .completion-message p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
         .faith-message {
             background: linear-gradient(135deg, #FFF9E6, var(--gold-light));
             border: 2px solid var(--gold);
@@ -733,6 +921,36 @@
             display: flex;
         }
 
+        /* Custom Items */
+        .situation-item.custom {
+            border-right-color: var(--gold);
+            background: linear-gradient(135deg, #FFF9E6 0%, white 100%);
+        }
+
+        .situation-item .delete-custom-btn {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .situation-item .delete-custom-btn:hover {
+            background: #ee5a5a;
+            transform: translateY(-50%) scale(1.1);
+        }
+
         /* Saved List Section */
         .saved-section {
             margin-top: 20px;
@@ -754,11 +972,14 @@
         .stats-bar {
             display: flex;
             justify-content: space-around;
+            align-items: center;
             background: white;
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 20px;
             box-shadow: var(--shadow-soft);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .stat-item {
@@ -774,6 +995,23 @@
         .stat-label {
             font-size: 0.8rem;
             color: var(--text-light);
+        }
+
+        .reset-stats-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-stats-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
         }
 
         /* Hidden states */
@@ -851,6 +1089,56 @@
             <button class="view-btn" data-view="saved" onclick="switchView('saved')">
                 💾 רשימה שמורה
             </button>
+            <button class="add-btn" id="addSituationBtn" onclick="showAddForm()">
+                ➕ הוספה
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Situation Modal -->
+    <div class="modal-overlay hidden" id="addModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ הוספת מצב חדש</h3>
+                <button class="modal-close" onclick="closeAddForm()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>שם המצב:</label>
+                    <input type="text" id="newTitle" placeholder="לדוגמה: פחד מדחייה">
+                </div>
+                <div class="form-group">
+                    <label>תיאור קצר:</label>
+                    <input type="text" id="newDesc" placeholder="לדוגמה: התמודדות עם דחייה חברתית">
+                </div>
+                <div class="form-group">
+                    <label>המחשבה הלא רצויה:</label>
+                    <textarea id="newStressText" placeholder="לדוגמה: מה אם לא יאהבו אותי?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>התגובה האמונית הרצויה:</label>
+                    <textarea id="newFaithResponse" placeholder="לדוגמה: אני שלמה בעצמי, הקב״ה אוהב אותי..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>פסוק מחזק:</label>
+                    <input type="text" id="newVerse" placeholder='לדוגמה: "השלך על ה׳ יהבך"'>
+                </div>
+                <div class="form-group">
+                    <label>מקור הפסוק:</label>
+                    <input type="text" id="newSource" placeholder="לדוגמה: תהילים נ״ה">
+                </div>
+                <div class="form-group">
+                    <label>מספר דמויות בסצנה:</label>
+                    <select id="newCharacters">
+                        <option value="1">1 - אני לבד</option>
+                        <option value="2">2 - אני ומישהו נוסף</option>
+                    </select>
+                </div>
+                <div class="buttons-row">
+                    <button class="btn" onclick="addCustomSituation()">✅ הוסף</button>
+                    <button class="btn secondary" onclick="closeAddForm()">ביטול</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -916,6 +1204,7 @@
                 <div class="stat-number" id="totalTime">0</div>
                 <div class="stat-label">דקות אימון</div>
             </div>
+            <button class="reset-stats-btn" onclick="doReset()">🗑️ איפוס</button>
         </div>
 
         <!-- Situations List -->
@@ -985,6 +1274,20 @@
                 </div>
             </div>
 
+            <!-- Faith Response Section - SHOWN BEFORE TRAINING -->
+            <div class="response-section" id="responseSection">
+                <div class="response-title">✨ <span>התגובה הרצויה - קראי והתכונני</span> ✨</div>
+                
+                <div class="speech-bubble faith" id="faithBubble">
+                    <p id="faithResponse">אני שלמה בעצמי. הקב"ה הוא המנהל את חיי, ואני בוטחת בו. בן זוגי הוא מתנה, אך האושר שלי לא תלוי באף אחד חוץ מהקשר שלי עם בורא עולם.</p>
+                </div>
+
+                <div class="faith-message">
+                    <div class="verse" id="verseText">"השלך על ה' יהבך והוא יכלכלך"</div>
+                    <div class="source" id="verseSource">תהילים נ"ה, כ"ג</div>
+                </div>
+            </div>
+
             <!-- Timer Section -->
             <div class="timer-section">
                 <div class="timer-circle" id="timerCircle">
@@ -995,29 +1298,20 @@
 
             <div class="buttons-row">
                 <button class="btn start" id="startBtn" onclick="startTraining()">
-                    ▶️ התחלת אימון
-                </button>
-                <button class="btn secondary hidden" id="nextBtn" onclick="showResponse()">
-                    המשך ←
+                    ▶️ מוכנה! התחלת אימון
                 </button>
             </div>
 
-            <!-- Response Section (appears after training) -->
-            <div class="response-section hidden" id="responseSection">
-                <div class="response-title">✨ <span>התגובה הרצויה</span> ✨</div>
-                
-                <div class="speech-bubble faith" id="faithBubble">
-                    <p id="faithResponse">אני שלמה בעצמי. הקב"ה הוא המנהל את חיי, ואני בוטחת בו. בן זוגי הוא מתנה, אך האושר שלי לא תלוי באף אחד חוץ מהקשר שלי עם בורא עולם.</p>
-                </div>
-
-                <div class="faith-message">
-                    <div class="verse" id="verseText">"השלך על ה' יהבך והוא יכלכלך"</div>
-                    <div class="source" id="verseSource">תהילים נ"ה, כ"ג</div>
+            <!-- Completion Section - SHOWN AFTER TRAINING -->
+            <div class="completion-section hidden" id="completionSection">
+                <div class="completion-message">
+                    <span class="completion-icon">🌟</span>
+                    <p>כל הכבוד! סיימת את האימון</p>
                 </div>
 
                 <div class="buttons-row">
                     <button class="btn" onclick="repeatTraining()">🔄 תרגול חוזר</button>
-                    <button class="btn secondary" onclick="nextSituation()">הבא →</button>
+                    <button class="btn secondary" onclick="nextSituation()">← הבא</button>
                 </div>
 
                 <!-- Save Button -->
@@ -1027,6 +1321,9 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Trained Situations List - shows completed trainings -->
+            <div class="trained-list" id="trainedList"></div>
         </section>
 
         <!-- Progress -->
@@ -1036,16 +1333,232 @@
             </div>
             <div class="progress-text"><span id="progressNum">0</span> מתוך <span id="progressTotal">10</span> מצבים באימון זה</div>
         </div>
-
-        <!-- Global Reset Section -->
-        <div class="global-reset-section" id="resetSection">
-            <button class="btn reset" onclick="resetAllData()">
-                🔄 איפוס והתחלה מחדש
-            </button>
-        </div>
     </div>
 
     <script>
+        // === RESET FUNCTION FIRST - חייב להיות ראשון! ===
+        function doReset() {
+            alert('מאפס...');
+            localStorage.clear();
+            location.reload();
+        }
+
+        function doDeleteSaved(index) {
+            alert('מוחק...');
+            savedSituations.splice(index, 1);
+            localStorage.setItem('faithSimSaved', JSON.stringify(savedSituations));
+            showSavedList();
+        }
+
+        // Trained situations list (auto-saved after each training)
+        var trainedSituations = [];
+
+        // Custom user situations
+        var customSituations = {};
+
+        // Load custom situations from localStorage
+        function loadCustomSituations() {
+            try {
+                var saved = localStorage.getItem('faithSimCustom');
+                if (saved) {
+                    customSituations = JSON.parse(saved);
+                }
+            } catch(e) {}
+        }
+
+        // Save custom situations to localStorage
+        function saveCustomSituations() {
+            try {
+                localStorage.setItem('faithSimCustom', JSON.stringify(customSituations));
+            } catch(e) {}
+        }
+
+        // Load trained situations from localStorage
+        function loadTrainedSituations() {
+            try {
+                var saved = localStorage.getItem('faithSimTrained');
+                if (saved) {
+                    trainedSituations = JSON.parse(saved);
+                }
+            } catch(e) {}
+        }
+
+        // Save trained situations to localStorage
+        function saveTrainedSituations() {
+            try {
+                localStorage.setItem('faithSimTrained', JSON.stringify(trainedSituations));
+            } catch(e) {}
+        }
+
+        // Show add form modal
+        function showAddForm() {
+            if (!currentCategory || currentCategory === 'intro') {
+                alert('יש לבחור קטגוריה לפני הוספת מצב חדש');
+                return;
+            }
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+
+        // Close add form modal
+        function closeAddForm() {
+            document.getElementById('addModal').classList.add('hidden');
+            // Clear form
+            document.getElementById('newTitle').value = '';
+            document.getElementById('newDesc').value = '';
+            document.getElementById('newStressText').value = '';
+            document.getElementById('newFaithResponse').value = '';
+            document.getElementById('newVerse').value = '';
+            document.getElementById('newSource').value = '';
+            document.getElementById('newCharacters').value = '1';
+        }
+
+        // Add custom situation
+        function addCustomSituation() {
+            var title = document.getElementById('newTitle').value.trim();
+            var desc = document.getElementById('newDesc').value.trim();
+            var stressText = document.getElementById('newStressText').value.trim();
+            var faithResponse = document.getElementById('newFaithResponse').value.trim();
+            var verse = document.getElementById('newVerse').value.trim();
+            var source = document.getElementById('newSource').value.trim();
+            var characters = parseInt(document.getElementById('newCharacters').value);
+
+            if (!title || !stressText || !faithResponse) {
+                alert('יש למלא לפחות: שם המצב, המחשבה הלא רצויה, והתגובה האמונית');
+                return;
+            }
+
+            var newSit = {
+                id: 'custom-' + Date.now(),
+                title: title,
+                desc: desc || title,
+                stressText: stressText,
+                faithResponse: faithResponse,
+                verse: verse || '"בטחו בה\' עדי עד"',
+                source: source || 'ישעיהו כ"ו',
+                characters: characters,
+                isCustom: true
+            };
+
+            // Add to customSituations for this category
+            if (!customSituations[currentCategory]) {
+                customSituations[currentCategory] = [];
+            }
+            customSituations[currentCategory].push(newSit);
+            saveCustomSituations();
+
+            // Also add to situationsDB for current session
+            if (situationsDB[currentCategory]) {
+                situationsDB[currentCategory].push(newSit);
+            }
+
+            closeAddForm();
+            showSituationsList(currentCategory);
+            alert('המצב נוסף בהצלחה! ✨');
+        }
+
+        // Add to trained list (called after completing training)
+        function addToTrainedList(situation) {
+            var now = new Date();
+            var timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            
+            var trainedItem = {
+                id: situation.id,
+                title: situation.title,
+                time: timeStr,
+                timestamp: now.getTime()
+            };
+
+            // Check if already in list
+            var exists = trainedSituations.some(function(item) {
+                return item.id === situation.id && item.time === timeStr;
+            });
+
+            if (!exists) {
+                trainedSituations.unshift(trainedItem);
+                // Keep only last 20 trained items
+                if (trainedSituations.length > 20) {
+                    trainedSituations = trainedSituations.slice(0, 20);
+                }
+                saveTrainedSituations();
+                updateTrainedListDisplay();
+            }
+        }
+
+        // Update trained list display
+        function updateTrainedListDisplay() {
+            var trainedList = document.getElementById('trainedList');
+            if (trainedSituations.length === 0) {
+                trainedList.innerHTML = '';
+                return;
+            }
+
+            trainedList.innerHTML = '<div class="trained-list-title">✅ אימונים אחרונים</div>';
+            
+            trainedSituations.forEach(function(item, index) {
+                var trainedItem = document.createElement('div');
+                trainedItem.className = 'trained-item';
+                
+                var content = document.createElement('div');
+                content.className = 'trained-item-content';
+                
+                var title = document.createElement('div');
+                title.className = 'trained-item-title';
+                title.textContent = item.title;
+                
+                var time = document.createElement('div');
+                time.className = 'trained-item-time';
+                time.textContent = '🕐 ' + item.time;
+                
+                content.appendChild(title);
+                content.appendChild(time);
+                
+                var deleteBtn = document.createElement('button');
+                deleteBtn.className = 'trained-item-delete';
+                deleteBtn.textContent = '✕';
+                
+                (function(idx) {
+                    deleteBtn.addEventListener('click', function() {
+                        trainedSituations.splice(idx, 1);
+                        saveTrainedSituations();
+                        updateTrainedListDisplay();
+                    });
+                })(index);
+                
+                trainedItem.appendChild(content);
+                trainedItem.appendChild(deleteBtn);
+                trainedList.appendChild(trainedItem);
+            });
+        }
+
+        // Delete trained item
+        function deleteTrainedItem(index) {
+            trainedSituations.splice(index, 1);
+            saveTrainedSituations();
+            updateTrainedListDisplay();
+        }
+
+        // Delete custom situation
+        function deleteCustomSituation(sitId, category) {
+            if (confirm('למחוק את המצב שהוספת?')) {
+                // Remove from customSituations
+                if (customSituations[category]) {
+                    customSituations[category] = customSituations[category].filter(function(s) {
+                        return s.id !== sitId;
+                    });
+                    saveCustomSituations();
+                }
+                
+                // Remove from situationsDB
+                if (situationsDB[category]) {
+                    situationsDB[category] = situationsDB[category].filter(function(s) {
+                        return s.id !== sitId;
+                    });
+                }
+                
+                showSituationsList(category);
+            }
+        }
+
         // All Situations Database
         const situationsDB = {
             fears: [
@@ -1462,6 +1975,36 @@
             ],
             health: [
                 {
+                    id: 'headache',
+                    title: 'כאב ראש',
+                    desc: 'כשיש כאב ראש מציק',
+                    characters: 1,
+                    stressText: 'אוף, הראש שלי כואב... אני לא יכולה לתפקד ככה!',
+                    faithResponse: 'גם הכאב הזה מה\'. אנוח, אשתה מים, ואזכור שזה זמני. הקב"ה שולח רפואה.',
+                    verse: '"רפאני ה\' וארפא"',
+                    source: 'ירמיהו י"ז, י"ד'
+                },
+                {
+                    id: 'stomach-upset',
+                    title: 'קלקול קיבה',
+                    desc: 'בעיות בבטן או בעיכול',
+                    characters: 1,
+                    stressText: 'הבטן שלי כואבת ממש... למה דווקא עכשיו?!',
+                    faithResponse: 'הגוף שלי מתנקה ומתאזן. אדאג לעצמי ואבטח שזה יעבור. הכל בידי שמיים.',
+                    verse: '"ה\' יסעדנו על ערש דוי"',
+                    source: 'תהילים מ"א, ד\''
+                },
+                {
+                    id: 'flu',
+                    title: 'שפעת או הצטננות',
+                    desc: 'מחלה עונתית',
+                    characters: 1,
+                    stressText: 'אני חולה ויש לי מיליון דברים לעשות! איך אני אתמודד?',
+                    faithResponse: 'הגוף שלי צריך מנוחה. הקב"ה מנהל את העולם גם בלעדי. אנוח ואתרפא.',
+                    verse: '"כי אני ה\' רופאך"',
+                    source: 'שמות ט"ו, כ"ו'
+                },
+                {
                     id: 'diagnosis',
                     title: 'קבלת אבחנה',
                     desc: 'כשמקבלים בשורה קשה',
@@ -1598,25 +2141,45 @@
         function init() {
             loadStats();
             loadSavedSituations();
+            loadCompletedSituations();
+            loadCustomSituations();
+            loadTrainedSituations();
+            
+            // Merge custom situations into situationsDB
+            for (var cat in customSituations) {
+                if (situationsDB[cat]) {
+                    customSituations[cat].forEach(function(sit) {
+                        // Check if not already in DB
+                        var exists = situationsDB[cat].some(function(s) { return s.id === sit.id; });
+                        if (!exists) {
+                            situationsDB[cat].push(sit);
+                        }
+                    });
+                }
+            }
+            
             updateStatsDisplay();
+            updateTrainedListDisplay();
             showIntro(); // Show intro by default
             
-            categoryTabs.forEach(tab => {
-                tab.addEventListener('click', () => selectCategory(tab.dataset.category));
+            categoryTabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    selectCategory(tab.dataset.category);
+                });
             });
 
-            characterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    characterBtns.forEach(b => b.classList.remove('active'));
+            characterBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    characterBtns.forEach(function(b) { b.classList.remove('active'); });
                     btn.classList.add('active');
                     selectedCharacter = btn.dataset.character;
                     updateCharacterDisplay();
                 });
             });
 
-            expressionBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    expressionBtns.forEach(b => b.classList.remove('active'));
+            expressionBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    expressionBtns.forEach(function(b) { b.classList.remove('active'); });
                     btn.classList.add('active');
                     selectedExpression = btn.dataset.expression;
                 });
@@ -1632,57 +2195,69 @@
             simulationArea.classList.add('hidden');
             progressSection.classList.add('hidden');
             document.querySelector('.view-toggle').style.display = 'none';
-            document.getElementById('resetSection').style.display = 'block';
         }
 
         function hideIntro() {
             introSection.style.display = 'none';
             statsBar.style.display = 'flex';
             document.querySelector('.view-toggle').style.display = 'flex';
-            document.getElementById('resetSection').style.display = 'block';
-        }
-
-        function resetAllData() {
-            if (confirm('האם את בטוחה שברצונך למחוק את כל הנתונים ולהתחיל מחדש?\n\nפעולה זו תמחק:\n• את כל הסטטיסטיקות\n• את הרשימה השמורה\n• את היסטוריית האימונים')) {
-                // Clear all data
-                localStorage.removeItem('faithSimStats');
-                localStorage.removeItem('faithSimSaved');
-                
-                // Reset state
-                stats = { completed: 0, streak: 0, totalTime: 0 };
-                savedSituations = [];
-                completedSituations = [];
-                
-                // Update display
-                updateStatsDisplay();
-                
-                alert('כל הנתונים נמחקו בהצלחה! ✨\nמתחילים מחדש...');
-                
-                // Stay on intro
-                showIntro();
-            }
         }
 
         function loadStats() {
-            const saved = localStorage.getItem('faithSimStats');
-            if (saved) {
-                stats = JSON.parse(saved);
+            try {
+                const saved = localStorage.getItem('faithSimStats');
+                if (saved) {
+                    stats = JSON.parse(saved);
+                }
+            } catch(e) {
+                console.log('localStorage not available');
             }
         }
 
         function saveStats() {
-            localStorage.setItem('faithSimStats', JSON.stringify(stats));
+            try {
+                localStorage.setItem('faithSimStats', JSON.stringify(stats));
+            } catch(e) {
+                console.log('localStorage not available');
+            }
         }
 
         function loadSavedSituations() {
-            const saved = localStorage.getItem('faithSimSaved');
-            if (saved) {
-                savedSituations = JSON.parse(saved);
+            try {
+                const saved = localStorage.getItem('faithSimSaved');
+                if (saved) {
+                    savedSituations = JSON.parse(saved);
+                }
+            } catch(e) {
+                console.log('localStorage not available');
             }
         }
 
         function saveSavedSituations() {
-            localStorage.setItem('faithSimSaved', JSON.stringify(savedSituations));
+            try {
+                localStorage.setItem('faithSimSaved', JSON.stringify(savedSituations));
+            } catch(e) {
+                console.log('localStorage not available');
+            }
+        }
+
+        function loadCompletedSituations() {
+            try {
+                const saved = localStorage.getItem('faithSimCompleted');
+                if (saved) {
+                    completedSituations = JSON.parse(saved);
+                }
+            } catch(e) {
+                console.log('localStorage not available');
+            }
+        }
+
+        function saveCompletedSituations() {
+            try {
+                localStorage.setItem('faithSimCompleted', JSON.stringify(completedSituations));
+            } catch(e) {
+                console.log('localStorage not available');
+            }
         }
 
         function updateStatsDisplay() {
@@ -1742,16 +2317,59 @@
             const situations = situationsDB[category];
             situationsList.innerHTML = '';
             
-            situations.forEach((sit, index) => {
-                const isCompleted = completedSituations.includes(sit.id);
-                const isSaved = savedSituations.some(s => s.id === sit.id);
-                const item = document.createElement('div');
-                item.className = `situation-item ${isCompleted ? 'completed' : ''}`;
-                item.innerHTML = `
-                    <div class="item-title">${isCompleted ? '✅ ' : ''}${isSaved ? '💾 ' : ''}${sit.title}</div>
-                    <div class="item-preview">${sit.desc}</div>
-                `;
-                item.addEventListener('click', () => selectSituation(sit, index, category));
+            situations.forEach(function(sit, index) {
+                var isCompleted = completedSituations.includes(sit.id);
+                var isSaved = savedSituations.some(function(s) { return s.id === sit.id; });
+                var isCustom = sit.isCustom;
+                
+                var item = document.createElement('div');
+                item.className = 'situation-item' + (isCompleted ? ' completed' : '') + (isCustom ? ' custom' : '');
+                
+                var titleDiv = document.createElement('div');
+                titleDiv.className = 'item-title';
+                titleDiv.textContent = (isCompleted ? '✅ ' : '') + (isSaved ? '💾 ' : '') + (isCustom ? '⭐ ' : '') + sit.title;
+                
+                var previewDiv = document.createElement('div');
+                previewDiv.className = 'item-preview';
+                previewDiv.textContent = sit.desc;
+                
+                item.appendChild(titleDiv);
+                item.appendChild(previewDiv);
+                
+                if (isCustom) {
+                    var deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-custom-btn';
+                    deleteBtn.textContent = '✕';
+                    item.appendChild(deleteBtn);
+                    
+                    (function(sitId, cat) {
+                        deleteBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            if (confirm('למחוק את המצב שהוספת?')) {
+                                if (customSituations[cat]) {
+                                    customSituations[cat] = customSituations[cat].filter(function(s) {
+                                        return s.id !== sitId;
+                                    });
+                                    saveCustomSituations();
+                                }
+                                if (situationsDB[cat]) {
+                                    situationsDB[cat] = situationsDB[cat].filter(function(s) {
+                                        return s.id !== sitId;
+                                    });
+                                }
+                                showSituationsList(cat);
+                            }
+                        });
+                    })(sit.id, category);
+                }
+                
+                (function(situation, idx, cat) {
+                    item.addEventListener('click', function(e) {
+                        if (e.target.classList.contains('delete-custom-btn')) return;
+                        selectSituation(situation, idx, cat);
+                    });
+                })(sit, index, category);
+                
                 situationsList.appendChild(item);
             });
 
@@ -1762,33 +2380,31 @@
         }
 
         function showSavedList() {
-            savedList.innerHTML = '';
+            var html = '';
 
             if (savedSituations.length === 0) {
-                savedList.innerHTML = `
-                    <div class="saved-empty">
-                        <div class="icon">📑</div>
-                        <p>אין מצבים שמורים עדיין</p>
-                        <p style="font-size: 0.85rem; margin-top: 5px;">לחצי על כפתור השמירה בזמן אימון כדי לשמור</p>
-                    </div>
-                `;
-                return;
+                html = '<div class="saved-empty"><div class="icon">📑</div><p>אין מצבים שמורים עדיין</p><p style="font-size: 0.85rem; margin-top: 5px;">לחצי על כפתור השמירה בזמן אימון כדי לשמור</p></div>';
+            } else {
+                for (var i = 0; i < savedSituations.length; i++) {
+                    var sit = savedSituations[i];
+                    var isCompleted = completedSituations.indexOf(sit.id) !== -1;
+                    html += '<div class="situation-item saved-item' + (isCompleted ? ' completed' : '') + '" onclick="selectSavedItem(' + i + ')">';
+                    html += '<div class="item-title">' + (isCompleted ? '✅ ' : '') + sit.title + '</div>';
+                    html += '<div class="item-preview">' + sit.desc + '</div>';
+                    html += '<button class="delete-btn" onclick="event.stopPropagation();doDeleteSaved(' + i + ')">✕</button>';
+                    html += '</div>';
+                }
             }
-
-            savedSituations.forEach((sit, index) => {
-                const isCompleted = completedSituations.includes(sit.id);
-                const item = document.createElement('div');
-                item.className = `situation-item saved-item ${isCompleted ? 'completed' : ''}`;
-                item.innerHTML = `
-                    <div class="item-title">${isCompleted ? '✅ ' : ''}${sit.title}</div>
-                    <div class="item-preview">${sit.desc}</div>
-                    <button class="delete-btn" onclick="event.stopPropagation(); deleteSavedSituation(${index})">✕</button>
-                `;
-                item.addEventListener('click', () => selectSituation(sit, index, sit.category));
-                savedList.appendChild(item);
-            });
-
+            
+            savedList.innerHTML = html;
             savedList.classList.add('active');
+        }
+
+        function selectSavedItem(index) {
+            var sit = savedSituations[index];
+            if (sit) {
+                selectSituation(sit, index, sit.category);
+            }
         }
 
         function saveSituation() {
@@ -1856,8 +2472,7 @@
 
         function resetTrainingUI() {
             document.getElementById('startBtn').classList.remove('hidden');
-            document.getElementById('nextBtn').classList.add('hidden');
-            document.getElementById('responseSection').classList.add('hidden');
+            document.getElementById('completionSection').classList.add('hidden');
             document.getElementById('timerNumber').textContent = '6';
             document.getElementById('timerCircle').style.setProperty('--progress', '0%');
             
@@ -1892,33 +2507,36 @@
             const timerCircle = document.getElementById('timerCircle');
             const mainChar = document.getElementById('mainCharacter');
 
-            timerInterval = setInterval(() => {
+            timerInterval = setInterval(function() {
                 timeLeft--;
                 timerNumber.textContent = timeLeft;
                 const progress = ((6 - timeLeft) / 6) * 100;
-                timerCircle.style.setProperty('--progress', `${progress}%`);
+                timerCircle.style.setProperty('--progress', progress + '%');
 
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    document.getElementById('nextBtn').classList.remove('hidden');
                     mainChar.classList.remove('stressed');
                     mainChar.classList.add('calm');
+                    showCompletion();
                 }
             }, 1000);
         }
 
-        function showResponse() {
-            document.getElementById('nextBtn').classList.add('hidden');
-            document.getElementById('responseSection').classList.remove('hidden');
+        function showCompletion() {
+            document.getElementById('completionSection').classList.remove('hidden');
             
             // Mark as completed
             if (!completedSituations.includes(currentSituation.id)) {
                 completedSituations.push(currentSituation.id);
+                saveCompletedSituations();
                 stats.completed++;
                 stats.totalTime += 1;
                 saveStats();
                 updateStatsDisplay();
             }
+            
+            // Add to trained list automatically
+            addToTrainedList(currentSituation);
             
             updateProgress();
         }
@@ -1934,6 +2552,22 @@
             selectSituation(situations[currentSituationIndex], currentSituationIndex);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Make functions globally accessible for onclick handlers
+        window.startTraining = startTraining;
+        window.repeatTraining = repeatTraining;
+        window.nextSituation = nextSituation;
+        window.saveSituation = saveSituation;
+        window.switchView = switchView;
+        window.deleteSavedSituation = deleteSavedSituation;
+        window.showAddForm = showAddForm;
+        window.closeAddForm = closeAddForm;
+        window.addCustomSituation = addCustomSituation;
+        window.deleteTrainedItem = deleteTrainedItem;
+        window.deleteCustomSituation = deleteCustomSituation;
+        window.selectSavedItem = selectSavedItem;
+        window.doDeleteSaved = doDeleteSaved;
+        window.doReset = doReset;
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', init);
