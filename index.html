@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סימולטור אמוני - אימון לתגובות של אמונה וחוסן</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Secular+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #F8BBD9;
+            --pink-light: #FDE7F0;
+            --mint: #B8E6D4;
+            --mint-light: #E0F5EE;
+            --gold: #D4AF37;
+            --gold-light: #F5E6B8;
+            --cream: #FFF9F0;
+            --text-dark: #2D3436;
+            --text-light: #636E72;
+            --shadow: 0 10px 40px rgba(212, 175, 55, 0.15);
+            --shadow-soft: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--pink-light) 50%, var(--mint-light) 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        /* בס"ד */
+        .bsd {
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--gold) 0%, #E8C547 100%);
+            padding: 25px;
+            padding-top: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '✡';
+            position: absolute;
+            font-size: 150px;
+            opacity: 0.05;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: blur(2px);
+        }
+
+        .header h1 {
+            font-family: 'Secular One', sans-serif;
+            font-size: 2.2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Category Tabs */
+        .categories-tabs-wrapper {
+            background: white;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 20px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .categories-tabs {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 5px;
+            gap: 5px;
+        }
+
+        .categories-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-tab {
+            background: var(--cream);
+            border: none;
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .category-tab:hover {
+            background: var(--pink-light);
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, var(--gold) 0%, #E8C547 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .category-tab .emoji {
+            font-size: 1.3rem;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .category-tab .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .category-tab.active .label {
+            color: white;
+        }
+
+        .category-tab.intro-tab {
+            background: var(--mint-light);
+        }
+
+        .category-tab.intro-tab.active {
+            background: linear-gradient(135deg, var(--mint) 0%, #8DD4BE 100%);
+        }
+
+        /* Intro Section */
+        .intro-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 20px;
+        }
+
+        .intro-section h2 {
+            font-family: 'Secular One', sans-serif;
+            color: var(--gold);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .intro-section h3 {
+            color: var(--mint);
+            font-size: 1.1rem;
+            margin: 20px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .intro-section p {
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .intro-section .highlight {
+            background: var(--gold-light);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-right: 4px solid var(--gold);
+        }
+
+        .intro-section .highlight p {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .intro-steps {
+            background: var(--cream);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .intro-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .intro-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            background: var(--gold);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Global Reset Section */
+        .global-reset-section {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .btn.reset {
+            background: linear-gradient(135deg, #9b8ac4 0%, #8677b0 100%);
+            box-shadow: 0 5px 20px rgba(155, 138, 196, 0.3);
+        }
+
+        .btn.reset:hover {
+            box-shadow: 0 8px 30px rgba(155, 138, 196, 0.4);
+        }
+
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            border-top: 1px solid var(--cream);
+        }
+
+        .view-btn {
+            background: var(--cream);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-btn:hover {
+            background: var(--pink-light);
+        }
+
+        .view-btn.active {
+            background: var(--mint);
+            border-color: var(--mint);
+            color: white;
+        }
+
+        .section-title {
+            font-family: 'Secular One', sans-serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Character Selection */
+        .character-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .character-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .character-btn {
+            background: var(--cream);
+            border: 3px solid transparent;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .character-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .character-btn.active {
+            border-color: var(--gold);
+            background: var(--gold-light);
+        }
+
+        /* Simulation Area */
+        .simulation-area {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .simulation-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--pink), var(--mint), var(--gold));
+        }
+
+        /* Scene Display */
+        .scene-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .scene-characters {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .character-display {
+            position: relative;
+        }
+
+        .character-avatar {
+            font-size: 5rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            transition: all 0.3s ease;
+        }
+
+        .character-avatar.stressed {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .character-avatar.calm {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(184, 230, 212, 0.5)); }
+            50% { filter: drop-shadow(0 0 25px rgba(184, 230, 212, 0.8)); }
+        }
+
+        /* Speech Bubbles */
+        .speech-bubble {
+            background: var(--pink-light);
+            border-radius: 20px;
+            padding: 15px 20px;
+            position: relative;
+            margin: 15px auto;
+            max-width: 90%;
+            box-shadow: var(--shadow-soft);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-top-color: var(--pink-light);
+        }
+
+        .speech-bubble.response {
+            background: var(--mint-light);
+        }
+
+        .speech-bubble.response::after {
+            border-top-color: var(--mint-light);
+        }
+
+        .speech-bubble.faith {
+            background: linear-gradient(135deg, var(--gold-light), #FFF9E6);
+            border: 2px solid var(--gold);
+        }
+
+        .speech-bubble.faith::after {
+            border-top-color: var(--gold-light);
+        }
+
+        .speech-bubble p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Situation Info */
+        .situation-info {
+            background: var(--cream);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .situation-title {
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .situation-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Timer */
+        .timer-section {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .timer-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--gold) var(--progress, 0%), var(--cream) var(--progress, 0%));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        .timer-circle::before {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .timer-number {
+            position: relative;
+            font-family: 'Secular One', sans-serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Expression Selection */
+        .expression-section {
+            margin: 20px 0;
+        }
+
+        .expression-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .expressions-grid {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .expression-btn {
+            background: var(--cream);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.8rem;
+        }
+
+        .expression-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .expression-btn.active {
+            border-color: var(--gold);
+            background: var(--gold-light);
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, var(--gold) 0%, #E8C547 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Heebo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.secondary {
+            background: white;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn.save-btn {
+            background: linear-gradient(135deg, var(--pink) 0%, #F0A0C8 100%);
+            box-shadow: 0 5px 20px rgba(248, 187, 217, 0.4);
+        }
+
+        .btn.save-btn:hover {
+            box-shadow: 0 8px 30px rgba(248, 187, 217, 0.5);
+        }
+
+        .btn.start {
+            background: linear-gradient(135deg, var(--mint) 0%, #8DD4BE 100%);
+            box-shadow: 0 5px 20px rgba(184, 230, 212, 0.5);
+        }
+
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Response Display */
+        .response-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px dashed var(--mint);
+        }
+
+        .response-title {
+            font-family: 'Secular One', sans-serif;
+            color: var(--mint);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .response-title span {
+            color: var(--gold);
+        }
+
+        .faith-message {
+            background: linear-gradient(135deg, #FFF9E6, var(--gold-light));
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .faith-message .verse {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .faith-message .source {
+            font-size: 0.9rem;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Progress */
+        .progress-bar {
+            background: var(--cream);
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--mint), var(--gold));
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Situations List */
+        .situations-list {
+            display: none;
+            margin-top: 0;
+        }
+
+        .situations-list.active {
+            display: block;
+        }
+
+        .situation-item {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            padding-left: 45px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+            border-right: 4px solid transparent;
+            position: relative;
+        }
+
+        .situation-item:hover {
+            transform: translateX(-5px);
+            border-right-color: var(--gold);
+        }
+
+        .situation-item.completed {
+            border-right-color: var(--mint);
+            opacity: 0.7;
+        }
+
+        .situation-item .item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .situation-item .item-preview {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .situation-item .delete-btn {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            color: white;
+            font-size: 1rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .situation-item .delete-btn:hover {
+            background: #ee5a5a;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .situation-item.saved-item .delete-btn {
+            display: flex;
+        }
+
+        /* Saved List Section */
+        .saved-section {
+            margin-top: 20px;
+        }
+
+        .saved-empty {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+        }
+
+        .saved-empty .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Secular One', sans-serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Hidden states */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .character-avatar {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="bsd">בס"ד</div>
+        <h1>🕊️ סימולטור אמוני</h1>
+        <p>אימון לתגובות של אמונה, שקט וחוסן פנימי</p>
+    </header>
+
+    <!-- Category Tabs -->
+    <div class="categories-tabs-wrapper">
+        <div class="categories-tabs">
+            <button class="category-tab intro-tab active" data-category="intro">
+                <span class="emoji">📖</span>
+                <span class="label">מבוא</span>
+            </button>
+            <button class="category-tab" data-category="fears">
+                <span class="emoji">😰</span>
+                <span class="label">חרדות ופחדים</span>
+            </button>
+            <button class="category-tab" data-category="anger">
+                <span class="emoji">😤</span>
+                <span class="label">מצבים מכעיסים</span>
+            </button>
+            <button class="category-tab" data-category="sadness">
+                <span class="emoji">😢</span>
+                <span class="label">עצב ואכזבה</span>
+            </button>
+            <button class="category-tab" data-category="stress">
+                <span class="emoji">😫</span>
+                <span class="label">לחץ ותסכול</span>
+            </button>
+            <button class="category-tab" data-category="relationships">
+                <span class="emoji">💔</span>
+                <span class="label">זוגיות ומשפחה</span>
+            </button>
+            <button class="category-tab" data-category="social">
+                <span class="emoji">👥</span>
+                <span class="label">מצבים חברתיים</span>
+            </button>
+            <button class="category-tab" data-category="health">
+                <span class="emoji">🏥</span>
+                <span class="label">בריאות ומחלה</span>
+            </button>
+            <button class="category-tab" data-category="money">
+                <span class="emoji">💰</span>
+                <span class="label">כלכלה ופרנסה</span>
+            </button>
+        </div>
+        <div class="view-toggle">
+            <button class="view-btn active" data-view="situations" onclick="switchView('situations')">
+                📋 כל המצבים
+            </button>
+            <button class="view-btn" data-view="saved" onclick="switchView('saved')">
+                💾 רשימה שמורה
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Intro Section -->
+        <section class="intro-section" id="introSection">
+            <h2>🕊️ ברוכה הבאה לסימולטור האמוני</h2>
+            
+            <div class="highlight">
+                <p>המוח לא מבדיל בין דמיון למציאות. כשאנחנו מתאמנות על תגובות רצויות במחשבה - בזמן אמת נדע איך לפעול!</p>
+            </div>
+
+            <h3>💡 מהו הסימולטור?</h3>
+            <p>הסימולטור הוא כלי לאימון תגובות של אמונה, שקט וחוסן פנימי. במקום תגובות לא רצויות כמו כעס, פחד, חרדה או עצבות - נלמד להגיב מתוך ביטחון בהקב"ה והבנה שהכל ניסיונות.</p>
+
+            <h3>🎯 איך זה עובד?</h3>
+            <div class="intro-steps">
+                <div class="intro-step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">בחרי קטגוריה מהלשוניות למעלה (חרדות, כעס, עצב, לחץ ועוד)</div>
+                </div>
+                <div class="intro-step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">בחרי מצב חיים ספציפי שתרצי להתאמן עליו</div>
+                </div>
+                <div class="intro-step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">בחרי דמות שמייצגת אותך והבעת פנים נוכחית</div>
+                </div>
+                <div class="intro-step">
+                    <div class="step-number">4</div>
+                    <div class="step-text">לחצי "התחלת אימון" - יש לך 6 שניות להתמקד בתגובה הרצויה</div>
+                </div>
+                <div class="intro-step">
+                    <div class="step-number">5</div>
+                    <div class="step-text">קבלי את התגובה האמונית + פסוק מחזק</div>
+                </div>
+                <div class="intro-step">
+                    <div class="step-number">6</div>
+                    <div class="step-text">שמרי מצבים שחשובים לך לרשימה האישית לתרגול חוזר</div>
+                </div>
+            </div>
+
+            <h3>✨ העיקרון המנחה</h3>
+            <p>תגובות לא רצויות הן מעין "עבודה זרה" - הן מראות שאנחנו שוכחות שהכל מה'. התגובות הרצויות הן של שקט, חוסן פנימי ואמונה בקב"ה - כי העסק שלנו הוא רק מולו והכל ניסיונות.</p>
+
+            <div class="highlight">
+                <p>🌟 "אין עוד מלבדו" - כשנפנים את זה, נוכל להגיב לכל מצב בשקט ובביטחון!</p>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <div class="stat-number" id="completedCount">0</div>
+                <div class="stat-label">אימונים שהושלמו</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="streakCount">0</div>
+                <div class="stat-label">רצף ימים</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalTime">0</div>
+                <div class="stat-label">דקות אימון</div>
+            </div>
+        </div>
+
+        <!-- Situations List -->
+        <div class="situations-list" id="situationsList">
+            <!-- Will be populated dynamically -->
+        </div>
+
+        <!-- Saved List -->
+        <div class="situations-list saved-section" id="savedList">
+            <div class="saved-empty">
+                <div class="icon">📑</div>
+                <p>אין מצבים שמורים עדיין</p>
+                <p style="font-size: 0.85rem; margin-top: 5px;">לחצי על כפתור השמירה בזמן אימון כדי לשמור</p>
+            </div>
+        </div>
+
+        <!-- Character Selection -->
+        <section class="character-section hidden" id="characterSection">
+            <h3 class="section-title">👤 בחרי דמות</h3>
+            <div class="character-options">
+                <button class="character-btn active" data-character="👩">👩</button>
+                <button class="character-btn" data-character="👨">👨</button>
+                <button class="character-btn" data-character="👩‍🦰">👩‍🦰</button>
+                <button class="character-btn" data-character="👨‍🦱">👨‍🦱</button>
+                <button class="character-btn" data-character="👩‍🦳">👩‍🦳</button>
+                <button class="character-btn" data-character="👨‍🦳">👨‍🦳</button>
+                <button class="character-btn" data-character="👧">👧</button>
+                <button class="character-btn" data-character="👦">👦</button>
+            </div>
+        </section>
+
+        <!-- Simulation Area -->
+        <section class="simulation-area hidden" id="simulationArea">
+            <div class="situation-info">
+                <div class="situation-title" id="situationTitle">חרדת נטישה</div>
+                <div class="situation-desc" id="situationDesc">התמודדות עם פחד לאבד את בן/בת הזוג</div>
+            </div>
+
+            <div class="scene-display">
+                <div class="scene-characters">
+                    <div class="character-display">
+                        <div class="character-avatar" id="mainCharacter">👩</div>
+                    </div>
+                    <div class="character-display" id="secondCharacter">
+                        <div class="character-avatar">👨</div>
+                    </div>
+                </div>
+
+                <!-- Initial Stress Bubble -->
+                <div class="speech-bubble" id="stressBubble">
+                    <p id="stressText">מה אם הוא יעזוב אותי? אני לא יכולה בלעדיו...</p>
+                </div>
+
+                <!-- Expression Selection -->
+                <div class="expression-section">
+                    <div class="expression-label">איך את מרגישה עכשיו?</div>
+                    <div class="expressions-grid">
+                        <button class="expression-btn" data-expression="😰">😰</button>
+                        <button class="expression-btn" data-expression="😨">😨</button>
+                        <button class="expression-btn" data-expression="😢">😢</button>
+                        <button class="expression-btn" data-expression="😔">😔</button>
+                        <button class="expression-btn" data-expression="😌">😌</button>
+                        <button class="expression-btn" data-expression="🙂">🙂</button>
+                        <button class="expression-btn" data-expression="😊">😊</button>
+                        <button class="expression-btn" data-expression="🥰">🥰</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timer Section -->
+            <div class="timer-section">
+                <div class="timer-circle" id="timerCircle">
+                    <span class="timer-number" id="timerNumber">6</span>
+                </div>
+                <div class="timer-label">שניות להתמקדות בתגובה הרצויה</div>
+            </div>
+
+            <div class="buttons-row">
+                <button class="btn start" id="startBtn" onclick="startTraining()">
+                    ▶️ התחלת אימון
+                </button>
+                <button class="btn secondary hidden" id="nextBtn" onclick="showResponse()">
+                    המשך ←
+                </button>
+            </div>
+
+            <!-- Response Section (appears after training) -->
+            <div class="response-section hidden" id="responseSection">
+                <div class="response-title">✨ <span>התגובה הרצויה</span> ✨</div>
+                
+                <div class="speech-bubble faith" id="faithBubble">
+                    <p id="faithResponse">אני שלמה בעצמי. הקב"ה הוא המנהל את חיי, ואני בוטחת בו. בן זוגי הוא מתנה, אך האושר שלי לא תלוי באף אחד חוץ מהקשר שלי עם בורא עולם.</p>
+                </div>
+
+                <div class="faith-message">
+                    <div class="verse" id="verseText">"השלך על ה' יהבך והוא יכלכלך"</div>
+                    <div class="source" id="verseSource">תהילים נ"ה, כ"ג</div>
+                </div>
+
+                <div class="buttons-row">
+                    <button class="btn" onclick="repeatTraining()">🔄 תרגול חוזר</button>
+                    <button class="btn secondary" onclick="nextSituation()">הבא →</button>
+                </div>
+
+                <!-- Save Button -->
+                <div class="buttons-row" style="margin-top: 15px;">
+                    <button class="btn save-btn" id="saveBtn" onclick="saveSituation()">
+                        💾 שמור לרשימה
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress -->
+        <div class="progress-section hidden" id="progressSection">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text"><span id="progressNum">0</span> מתוך <span id="progressTotal">10</span> מצבים באימון זה</div>
+        </div>
+
+        <!-- Global Reset Section -->
+        <div class="global-reset-section" id="resetSection">
+            <button class="btn reset" onclick="resetAllData()">
+                🔄 איפוס והתחלה מחדש
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // All Situations Database
+        const situationsDB = {
+            fears: [
+                {
+                    id: 'abandonment',
+                    title: 'חרדת נטישה',
+                    desc: 'פחד לאבד את בן/בת הזוג',
+                    characters: 2,
+                    stressText: 'מה אם הוא יעזוב אותי? אני לא יכולה בלעדיו...',
+                    faithResponse: 'אני שלמה בעצמי. הקב"ה הוא המנהל את חיי, ואני בוטחת בו. בן זוגי הוא מתנה, אך האושר שלי לא תלוי באף אחד חוץ מהקשר שלי עם בורא עולם.',
+                    verse: '"השלך על ה\' יהבך והוא יכלכלך"',
+                    source: 'תהילים נ"ה, כ"ג'
+                },
+                {
+                    id: 'health-anxiety',
+                    title: 'חרדת בריאות',
+                    desc: 'פחד ממחלות וסימפטומים',
+                    characters: 1,
+                    stressText: 'יש לי כאב ראש כבר יומיים... בטוח שזה משהו רציני!',
+                    faithResponse: 'גופי בידיו של הקב"ה. הוא הרופא לכל בשר. אעשה את ההשתדלות שלי ואשאיר את התוצאות לבורא עולם.',
+                    verse: '"כי אני ה\' רפאך"',
+                    source: 'שמות ט"ו, כ"ו'
+                },
+                {
+                    id: 'financial-fear',
+                    title: 'חרדה כלכלית',
+                    desc: 'פחד מחוסר פרנסה',
+                    characters: 1,
+                    stressText: 'איך נעבור את החודש? אין מספיק כסף...',
+                    faithResponse: 'הפרנסה היא מה\'. הוא זן ומפרנס לכל. אעשה השתדלות ואבטח בו שידאג לכל צרכי.',
+                    verse: '"פותח את ידך ומשביע לכל חי רצון"',
+                    source: 'תהילים קמ"ה, ט"ז'
+                },
+                {
+                    id: 'performance-anxiety',
+                    title: 'חרדת ביצוע',
+                    desc: 'פחד מכישלון במשימה',
+                    characters: 1,
+                    stressText: 'מה אם אכשל? כולם יראו שאני לא מספיק טובה...',
+                    faithResponse: 'התפקיד שלי הוא ההשתדלות, התוצאות בידי שמיים. אני עושה את המיטב ובוטחת בה\'.',
+                    verse: '"גל אל ה\' מעשיך ויכנו מחשבתיך"',
+                    source: 'משלי ט"ז, ג\''
+                },
+                {
+                    id: 'social-anxiety',
+                    title: 'חרדה חברתית',
+                    desc: 'פחד משיפוט של אחרים',
+                    characters: 1,
+                    stressText: 'כולם מסתכלים עלי ושופטים אותי... מה הם חושבים עלי?',
+                    faithResponse: 'העניין שלי הוא רק מול הקב"ה. מה שאנשים חושבים עלי - זה לא העסק שלי. אני מנסה להיות טובה בעיני ה\'.',
+                    verse: '"ה\' לי לא אירא, מה יעשה לי אדם"',
+                    source: 'תהילים קי"ח, ו\''
+                },
+                {
+                    id: 'future-fear',
+                    title: 'פחד מהעתיד',
+                    desc: 'חרדה מהלא נודע',
+                    characters: 1,
+                    stressText: 'מה יהיה? איך אתמודד עם מה שמחכה לי?',
+                    faithResponse: 'העתיד בידי ה\'. אני חיה ברגע הזה ובוטחת שהקב"ה יתן לי את הכוחות להתמודד עם כל מה שיבוא.',
+                    verse: '"אל תדאג למחר כי יום יום יביא את טרפו"',
+                    source: 'משלי כ"ז, א\''
+                },
+                {
+                    id: 'loss-fear',
+                    title: 'פחד מאובדן',
+                    desc: 'פחד לאבד קרובי משפחה',
+                    characters: 2,
+                    stressText: 'מה יהיה אם משהו יקרה לאמא? אני לא יכולה בלעדיה...',
+                    faithResponse: 'נשמות הן נצחיות. הקב"ה הוא שקובע את האורך של כל חיים. התפקיד שלי לאהוב ולהעריך כל רגע שניתן לי.',
+                    verse: '"ה\' נתן וה\' לקח, יהי שם ה\' מבורך"',
+                    source: 'איוב א\', כ"א'
+                },
+                {
+                    id: 'loneliness-fear',
+                    title: 'פחד מבדידות',
+                    desc: 'חרדה להישאר לבד',
+                    characters: 1,
+                    stressText: 'אני כל כך לבד... אף אחד לא באמת איתי...',
+                    faithResponse: 'אני אף פעם לא לבד. הקב"ה איתי בכל רגע. הוא האבא שלי שאוהב אותי תמיד.',
+                    verse: '"כי הוא אמר ואשנה, מכאוב ויעזבני - לא"',
+                    source: 'תהילים צ"ד, י"ד'
+                }
+            ],
+            anger: [
+                {
+                    id: 'insult',
+                    title: 'עלבון או פגיעה',
+                    desc: 'כשמישהו פוגע או מעליב',
+                    characters: 2,
+                    stressText: 'איך הוא העז להגיד לי את זה?! אני רוצה לצעוק עליו!',
+                    faithResponse: 'הנעלבים ואינם עולבים - עליהם הכתוב אומר "אוהביו כצאת השמש בגבורתו". זה ניסיון, והקב"ה רוצה לראות איך אגיב.',
+                    verse: '"והנעלבים ואינם עולבים... עליהם הכתוב אומר ואוהביו כצאת השמש בגבורתו"',
+                    source: 'שבת פ"ח ע"ב'
+                },
+                {
+                    id: 'unappreciated',
+                    title: 'חוסר הערכה',
+                    desc: 'כשלא מעריכים את המאמץ',
+                    characters: 2,
+                    stressText: 'עשיתי כל כך הרבה ואף אחד לא שם לב! זה לא הוגן!',
+                    faithResponse: 'אני עושה למען הקב"ה, לא למען אנשים. הוא רואה הכל ויגמול לי. "שכר מצווה - מצווה".',
+                    verse: '"ושכרך הרבה מאוד"',
+                    source: 'בראשית ט"ו, א\''
+                },
+                {
+                    id: 'injustice',
+                    title: 'אי צדק',
+                    desc: 'כשקורה משהו לא הוגן',
+                    characters: 1,
+                    stressText: 'זה לא הוגן! למה דווקא לי זה קורה?!',
+                    faithResponse: 'הקב"ה מנהל את העולם בצדק מושלם. אני לא רואה את כל התמונה. מה שנראה לי לא הוגן - יש לו סיבה עמוקה.',
+                    verse: '"צדיק ה\' בכל דרכיו וחסיד בכל מעשיו"',
+                    source: 'תהילים קמ"ה, י"ז'
+                },
+                {
+                    id: 'betrayal',
+                    title: 'בגידה או הפרת אמון',
+                    desc: 'כשמישהו קרוב מאכזב',
+                    characters: 2,
+                    stressText: 'סמכתי עליו והוא בגד בי! אני רוצה נקמה!',
+                    faithResponse: 'אנשים הם רק שליחים. מה שקרה לי הוא מה\'. אסלח כי הנקמה שייכת לה\' ולא לי.',
+                    verse: '"לי נקם ושלם"',
+                    source: 'דברים ל"ב, ל"ה'
+                },
+                {
+                    id: 'kids-disobey',
+                    title: 'ילדים לא מקשיבים',
+                    desc: 'כשהילדים לא שומעים בקול',
+                    characters: 2,
+                    stressText: 'כמה פעמים צריך להגיד?! אני הולכת להשתגע!',
+                    faithResponse: 'הקב"ה נתן לי את הילדים האלה בדיוק כי אני הכי מתאימה להם. זה ניסיון בסבלנות. אנשוף עמוק ואהיה רגועה.',
+                    verse: '"אל תרגז בדרך"',
+                    source: 'בראשית מ"ה, כ"ד'
+                },
+                {
+                    id: 'spouse-misunderstanding',
+                    title: 'בן/בת זוג לא מבין/ה',
+                    desc: 'חוסר הבנה בזוגיות',
+                    characters: 2,
+                    stressText: 'הוא פשוט לא מבין אותי! כמה אפשר להסביר?!',
+                    faithResponse: 'הקב"ה זיווג אותנו כי אנחנו משלימים זה את זה. במקום להתעצבן, אנסה להבין אותו ולתקשר אחרת.',
+                    verse: '"ועזר כנגדו"',
+                    source: 'בראשית ב\', י"ח'
+                },
+                {
+                    id: 'waiting',
+                    title: 'תור ארוך / המתנה',
+                    desc: 'כשצריך לחכות הרבה זמן',
+                    characters: 1,
+                    stressText: 'כבר חצי שעה שאני מחכה! אין לי זמן לזה!',
+                    faithResponse: 'הקב"ה סידר את ההמתנה הזו. אולי יש משהו שאני צריכה ללמוד מזה. אנצל את הזמן לתפילה או הרהור.',
+                    verse: '"קווה אל ה\' חזק ויאמץ לבך וקווה אל ה\'"',
+                    source: 'תהילים כ"ז, י"ד'
+                },
+                {
+                    id: 'neighbors',
+                    title: 'שכנים מטרידים',
+                    desc: 'התנהגות מעצבנת של שכנים',
+                    characters: 2,
+                    stressText: 'השכנים האלה מטורפים! הרעש הזה משגע אותי!',
+                    faithResponse: 'הקב"ה נתן לי את השכנים האלה. אולי זה ניסיון בסבלנות ואהבת הבריות. אנסה לפתור בדרכי נועם.',
+                    verse: '"דרכיה דרכי נועם וכל נתיבותיה שלום"',
+                    source: 'משלי ג\', י"ז'
+                },
+                {
+                    id: 'bureaucracy',
+                    title: 'ביורוקרטיה',
+                    desc: 'התעסקות עם מערכות מתסכלות',
+                    characters: 1,
+                    stressText: 'עוד טופס?! זה לעולם לא נגמר! אני מתפוצצת!',
+                    faithResponse: 'גם זה מה\'. הכל לטובה. אתעסק בזה בשקט ואזכור שהקב"ה מסדר את הכל.',
+                    verse: '"גם זו לטובה"',
+                    source: 'נחום איש גם זו - תענית כ"א'
+                }
+            ],
+            sadness: [
+                {
+                    id: 'rejection',
+                    title: 'דחייה',
+                    desc: 'כשדוחים אותנו',
+                    characters: 1,
+                    stressText: 'לא קיבלו אותי... אני לא מספיק טובה...',
+                    faithResponse: 'מה שלא מיועד לי - לא שלי. הקב"ה סגר דלת אחת כדי לפתוח דלת טובה יותר.',
+                    verse: '"רבות מחשבות בלב איש ועצת ה\' היא תקום"',
+                    source: 'משלי י"ט, כ"א'
+                },
+                {
+                    id: 'failure',
+                    title: 'כישלון',
+                    desc: 'כשדברים לא הצליחו',
+                    characters: 1,
+                    stressText: 'נכשלתי שוב... אני פשוט לא מצליחה בכלום...',
+                    faithResponse: 'נפילה היא הכנה לעלייה. הקב"ה רוצה שאלמד משהו מזה. "שבע יפול צדיק וקם".',
+                    verse: '"כי שבע יפול צדיק וקם"',
+                    source: 'משלי כ"ד, ט"ז'
+                },
+                {
+                    id: 'loss-grief',
+                    title: 'אובדן',
+                    desc: 'התמודדות עם אובדן',
+                    characters: 1,
+                    stressText: 'הלב שלי נשבר... איך אמשיך הלאה?',
+                    faithResponse: 'הנשמה חוזרת לבורא. העצב הוא טבעי, אך אני יודעת שהקב"ה לוקח רק כשהגיע הזמן.',
+                    verse: '"ה\' נתן וה\' לקח, יהי שם ה\' מבורך"',
+                    source: 'איוב א\', כ"א'
+                },
+                {
+                    id: 'loneliness-sadness',
+                    title: 'בדידות',
+                    desc: 'תחושה של בדידות',
+                    characters: 1,
+                    stressText: 'אין לי עם מי לדבר... אני כל כך לבד...',
+                    faithResponse: 'הקב"ה איתי תמיד. אני יכולה לדבר איתו בכל רגע. הוא החבר הכי קרוב שלי.',
+                    verse: '"קרוב ה\' לכל קוראיו, לכל אשר יקראוהו באמת"',
+                    source: 'תהילים קמ"ה, י"ח'
+                },
+                {
+                    id: 'nostalgia',
+                    title: 'געגוע',
+                    desc: 'געגוע לעבר או לאנשים',
+                    characters: 1,
+                    stressText: 'כל כך מתגעגעת לימים ההם... למה הכל השתנה?',
+                    faithResponse: 'כל תקופה יש לה ייעוד. הקב"ה מוביל אותי בדרך המתאימה לי עכשיו.',
+                    verse: '"לכל זמן ועת לכל חפץ תחת השמים"',
+                    source: 'קהלת ג\', א\''
+                },
+                {
+                    id: 'unfulfilled-dream',
+                    title: 'חלום שלא התגשם',
+                    desc: 'אכזבה מתוכניות שלא יצאו',
+                    characters: 1,
+                    stressText: 'כל כך רציתי את זה... למה זה לא קרה?',
+                    faithResponse: 'הקב"ה יודע מה באמת טוב לי. אולי מה שרציתי לא היה מתאים לי. אבטח בחכמתו.',
+                    verse: '"טוב ה\' לכל ורחמיו על כל מעשיו"',
+                    source: 'תהילים קמ"ה, ט\''
+                }
+            ],
+            stress: [
+                {
+                    id: 'overload',
+                    title: 'עומס משימות',
+                    desc: 'יותר מדי דברים לעשות',
+                    characters: 1,
+                    stressText: 'יש לי מיליון דברים לעשות! אני לא יכולה יותר!',
+                    faithResponse: 'אעשה דבר אחד בכל פעם. הקב"ה לא מצפה ממני ליותר ממה שאני יכולה. רק ההשתדלות.',
+                    verse: '"לא עליך המלאכה לגמור"',
+                    source: 'אבות ב\', ט"ז'
+                },
+                {
+                    id: 'time-pressure',
+                    title: 'חוסר זמן',
+                    desc: 'לחץ של זמן',
+                    characters: 1,
+                    stressText: 'אין לי זמן! אני צריכה עוד שעות ביום!',
+                    faithResponse: 'הקב"ה נתן לי בדיוק את הזמן שאני צריכה. אתעדף ואבטח שמה שחשוב יקרה.',
+                    verse: '"עת לעשות לה\'"',
+                    source: 'תהילים קי"ט, קכ"ו'
+                },
+                {
+                    id: 'high-expectations',
+                    title: 'ציפיות גבוהות מעצמי',
+                    desc: 'לחץ להיות מושלמת',
+                    characters: 1,
+                    stressText: 'אני חייבת להיות מושלמת! אני לא יכולה להרשות לעצמי לטעות!',
+                    faithResponse: 'הקב"ה ברא אותי אנושית, לא מושלמת. הוא אוהב אותי גם עם הטעויות שלי.',
+                    verse: '"כי אדם אין צדיק בארץ אשר יעשה טוב ולא יחטא"',
+                    source: 'קהלת ז\', כ\''
+                },
+                {
+                    id: 'family-conflict',
+                    title: 'קונפליקטים משפחתיים',
+                    desc: 'מריבות ומתחים במשפחה',
+                    characters: 2,
+                    stressText: 'למה המשפחה שלי כל כך קשה? אני לא יכולה יותר!',
+                    faithResponse: 'הקב"ה נתן לי את המשפחה הזו כי זה התיקון שלי. אנסה לראות את הטוב ולהביא שלום.',
+                    verse: '"בקש שלום ורדפהו"',
+                    source: 'תהילים ל"ד, ט"ו'
+                },
+                {
+                    id: 'financial-stress',
+                    title: 'בעיות כלכליות',
+                    desc: 'לחץ כספי',
+                    characters: 2,
+                    stressText: 'החשבונות נערמים ואין לי כסף! מה אעשה?',
+                    faithResponse: 'הפרנסה היא מהקב"ה. אעשה את ההשתדלות שלי ואבטח שהוא יפתח לי שערי פרנסה.',
+                    verse: '"ברכת ה\' היא תעשיר"',
+                    source: 'משלי י\', כ"ב'
+                },
+                {
+                    id: 'illness-stress',
+                    title: 'מחלה',
+                    desc: 'התמודדות עם מחלה',
+                    characters: 1,
+                    stressText: 'אני חולה ומרגישה נורא... למה זה קורה לי?',
+                    faithResponse: 'גם המחלה היא מה\'. אולי זה זמן לעצירה ולהתבוננות. הקב"ה הוא הרופא האמיתי.',
+                    verse: '"כי אני ה\' רופאך"',
+                    source: 'שמות ט"ו, כ"ו'
+                }
+            ],
+            relationships: [
+                {
+                    id: 'spouse-argument',
+                    title: 'ריב עם בן/בת זוג',
+                    desc: 'מריבה בזוגיות',
+                    characters: 2,
+                    stressText: 'הוא תמיד עושה את זה! אני כבר לא יכולה איתו!',
+                    faithResponse: 'בן זוגי הוא מראה שלי. הקב"ה שלח אותו ללמד אותי משהו. אנסה לראות את הטוב בו.',
+                    verse: '"ואהבת לרעך כמוך"',
+                    source: 'ויקרא י"ט, י"ח'
+                },
+                {
+                    id: 'parent-conflict',
+                    title: 'קונפליקט עם הורים',
+                    desc: 'מתח עם ההורים',
+                    characters: 2,
+                    stressText: 'ההורים שלי לא מבינים אותי! הם מתערבים יותר מדי!',
+                    faithResponse: 'כיבוד הורים היא מצווה גדולה. גם אם קשה, אנסה לכבד ולאהוב אותם.',
+                    verse: '"כבד את אביך ואת אמך"',
+                    source: 'שמות כ\', י"א'
+                },
+                {
+                    id: 'child-worry',
+                    title: 'דאגה לילדים',
+                    desc: 'חרדה בנוגע לילדים',
+                    characters: 2,
+                    stressText: 'אני כל כך מודאגת לילד שלי... מה אם משהו יקרה לו?',
+                    faithResponse: 'הילדים הם פיקדון מהקב"ה. אני עושה את שלי והוא שומר עליהם.',
+                    verse: '"הנה לא ינום ולא יישן שומר ישראל"',
+                    source: 'תהילים קכ"א, ד\''
+                },
+                {
+                    id: 'in-laws',
+                    title: 'יחסים עם חמות/חם',
+                    desc: 'מתחים עם המשפחה המורחבת',
+                    characters: 2,
+                    stressText: 'החמות שלי מתערבת בהכל! אני משתגעת!',
+                    faithResponse: 'גם החמות היא שליחות מהקב"ה. אנסה לראות את הכוונות הטובות שלה ולשמור על שלום.',
+                    verse: '"הווי מתלמידיו של אהרן, אוהב שלום ורודף שלום"',
+                    source: 'אבות א\', י"ב'
+                },
+                {
+                    id: 'sibling-rivalry',
+                    title: 'מריבות אחים',
+                    desc: 'קונפליקט בין אחים',
+                    characters: 2,
+                    stressText: 'האח/אחות שלי תמיד גורם/ת לי להרגיש רע!',
+                    faithResponse: 'האחים שלי הם משפחה לכל החיים. הקב"ה נתן לי אותם. אנסה לסלוח ולאהוב.',
+                    verse: '"הנה מה טוב ומה נעים שבת אחים גם יחד"',
+                    source: 'תהילים קל"ג, א\''
+                },
+                {
+                    id: 'friendship-hurt',
+                    title: 'פגיעה מחבר/ה',
+                    desc: 'אכזבה מחברות',
+                    characters: 2,
+                    stressText: 'חשבתי שהיא חברה אמיתית... איך היא יכלה לעשות לי את זה?',
+                    faithResponse: 'אנשים הם בני אדם וטועים. אסלח ואמשיך הלאה. החבר האמיתי היחיד הוא הקב"ה.',
+                    verse: '"וסלחת לעוונם"',
+                    source: 'שמות ל"ד, ט\''
+                }
+            ],
+            social: [
+                {
+                    id: 'public-speaking',
+                    title: 'דיבור מול קהל',
+                    desc: 'פחד לדבר בפומבי',
+                    characters: 1,
+                    stressText: 'כולם מסתכלים עלי... אני הולכת להתבייש!',
+                    faithResponse: 'הדברים שאני אומרת הם מה\'. אני רק צינור. הוא ישים בפי את המילים הנכונות.',
+                    verse: '"ה\' שפתי תפתח ופי יגיד תהלתך"',
+                    source: 'תהילים נ"א, י"ז'
+                },
+                {
+                    id: 'comparison',
+                    title: 'השוואה לאחרים',
+                    desc: 'הרגשה נחותה ביחס לאחרים',
+                    characters: 1,
+                    stressText: 'למה לכולם יש את מה שאני רוצה? למה רק אני לא?',
+                    faithResponse: 'לכל אחד יש את התיקון שלו. הקב"ה נתן לי בדיוק את מה שאני צריכה. "איזהו עשיר - השמח בחלקו".',
+                    verse: '"איזהו עשיר? השמח בחלקו"',
+                    source: 'אבות ד\', א\''
+                },
+                {
+                    id: 'gossip',
+                    title: 'רכילות עלי',
+                    desc: 'כשמדברים עלי לא טוב',
+                    characters: 2,
+                    stressText: 'אני יודעת שהם מדברים עלי... מה הם אומרים?',
+                    faithResponse: 'מה שאומרים עלי זה לא העסק שלי. העסק שלי הוא רק מול הקב"ה.',
+                    verse: '"אל תרבה שיחה עם האשה"',
+                    source: 'אבות א\', ה\''
+                },
+                {
+                    id: 'exclusion',
+                    title: 'הדרה חברתית',
+                    desc: 'לא מזמינים אותי',
+                    characters: 1,
+                    stressText: 'כולם נפגשים בלעדי... אני לא שווה כלום...',
+                    faithResponse: 'הערך שלי לא נקבע על ידי אנשים. הקב"ה אוהב אותי תמיד. זה מה שחשוב.',
+                    verse: '"חביב אדם שנברא בצלם"',
+                    source: 'אבות ג\', י"ד'
+                },
+                {
+                    id: 'criticism',
+                    title: 'ביקורת',
+                    desc: 'כשמבקרים אותי',
+                    characters: 2,
+                    stressText: 'למה הוא תמיד מבקר אותי? כלום לא טוב מספיק!',
+                    faithResponse: 'ביקורת יכולה ללמד אותי. אבדוק אם יש בה אמת ואשפר. אם לא - אשחרר.',
+                    verse: '"הוכח לחכם ויאהבך"',
+                    source: 'משלי ט\', ח\''
+                }
+            ],
+            health: [
+                {
+                    id: 'diagnosis',
+                    title: 'קבלת אבחנה',
+                    desc: 'כשמקבלים בשורה קשה',
+                    characters: 1,
+                    stressText: 'הרופא אמר... אני לא יכולה לעכל את זה...',
+                    faithResponse: 'גם זה מה\'. "כל מה שעושה הקב"ה - לטובה עושה". אקבל בצורה מושלמת את רצונו.',
+                    verse: '"כל דעביד רחמנא לטב עביד"',
+                    source: 'ברכות ס\' ע"ב'
+                },
+                {
+                    id: 'chronic-pain',
+                    title: 'כאב כרוני',
+                    desc: 'התמודדות עם כאב מתמשך',
+                    characters: 1,
+                    stressText: 'הכאב הזה לא עובר... אני לא יכולה יותר...',
+                    faithResponse: 'הכאב הוא כפרה ותיקון. הקב"ה לא שולח לי יותר ממה שאני יכולה להתמודד.',
+                    verse: '"יסורים ממרקים"',
+                    source: 'ברכות ה\' ע"א'
+                },
+                {
+                    id: 'loved-one-sick',
+                    title: 'קרוב משפחה חולה',
+                    desc: 'כשאדם קרוב חולה',
+                    characters: 2,
+                    stressText: 'אני כל כך מודאגת... מה יהיה איתו?',
+                    faithResponse: 'התפילה שלי יכולה לעזור. הקב"ה הוא הרופא. אעשה את שלי ואבטח בו.',
+                    verse: '"אל נא רפא נא לה"',
+                    source: 'במדבר י"ב, י"ג'
+                },
+                {
+                    id: 'infertility',
+                    title: 'קשיי פוריות',
+                    desc: 'התמודדות עם עקרות',
+                    characters: 2,
+                    stressText: 'למה כולם נפקדות חוץ ממני? למה אני לא?',
+                    faithResponse: 'הקב"ה הוא שפותח רחם. התזמון שלו מושלם. אני מתפללת ובוטחת.',
+                    verse: '"ויזכור אלקים את רחל... ויפתח את רחמה"',
+                    source: 'בראשית ל\', כ"ב'
+                },
+                {
+                    id: 'aging',
+                    title: 'הזדקנות',
+                    desc: 'קושי עם שינויים בגוף',
+                    characters: 1,
+                    stressText: 'הגוף שלי כבר לא מה שהיה... אני מזדקנת...',
+                    faithResponse: 'כל גיל יש לו יופי משלו. הנשמה שלי נצחית והיא מתעלה עם הזמן.',
+                    verse: '"עטרת תפארת שיבה, בדרך צדקה תמצא"',
+                    source: 'משלי ט"ז, ל"א'
+                }
+            ],
+            money: [
+                {
+                    id: 'job-loss',
+                    title: 'פיטורים',
+                    desc: 'אובדן מקום עבודה',
+                    characters: 1,
+                    stressText: 'פיטרו אותי! מה אני אעשה עכשיו?',
+                    faithResponse: 'הפרנסה מה\'. סגרו דלת אחת כדי לפתוח אחרת. אבטח בו שימציא לי פרנסה.',
+                    verse: '"משגיא לגויים ויאבדם, שוטח לגויים וינחם"',
+                    source: 'איוב י"ב, כ"ג'
+                },
+                {
+                    id: 'debt',
+                    title: 'חובות',
+                    desc: 'התמודדות עם חובות',
+                    characters: 1,
+                    stressText: 'יש לי חובות ואני לא יודעת איך לצאת מזה...',
+                    faithResponse: 'אעשה את ההשתדלות שלי בחכמה והקב"ה יעזור. הוא יכול להפוך כל מצב.',
+                    verse: '"עשיר ורש נפגשו, עושה כולם ה\'"',
+                    source: 'משלי כ"ב, ב\''
+                },
+                {
+                    id: 'expensive-surprise',
+                    title: 'הוצאה בלתי צפויה',
+                    desc: 'הוצאה גדולה פתאומית',
+                    characters: 1,
+                    stressText: 'עכשיו גם זה?! מאיפה אני אביא כסף לזה?!',
+                    faithResponse: 'הקב"ה שולח את הרפואה לפני המכה. אם שלח את ההוצאה - ישלח גם את הכסף.',
+                    verse: '"מכה ורפואה"',
+                    source: 'סוטה כ"א'
+                },
+                {
+                    id: 'cant-afford',
+                    title: 'לא יכולה להרשות לעצמי',
+                    desc: 'כשרוצים משהו ואין אפשרות',
+                    characters: 1,
+                    stressText: 'כולם קונים ולי אין! זה לא הוגן!',
+                    faithResponse: 'איזהו עשיר - השמח בחלקו. הקב"ה נתן לי בדיוק את מה שאני צריכה.',
+                    verse: '"איזהו עשיר? השמח בחלקו"',
+                    source: 'אבות ד\', א\''
+                },
+                {
+                    id: 'business-failure',
+                    title: 'עסק נכשל',
+                    desc: 'כישלון עסקי',
+                    characters: 1,
+                    stressText: 'העסק שלי קרס! כל מה שבניתי הלך...',
+                    faithResponse: 'גם זה מה\'. "שבע יפול צדיק וקם". הקב"ה יכול לבנות מחדש בכל רגע.',
+                    verse: '"ה\' מוריש ומעשיר"',
+                    source: 'שמואל א\' ב\', ז\''
+                }
+            ]
+        };
+
+        // State
+        let currentCategory = null;
+        let currentSituation = null;
+        let selectedCharacter = '👩';
+        let selectedExpression = '😰';
+        let timerInterval = null;
+        let completedSituations = [];
+        let savedSituations = [];
+        let currentSituationIndex = 0;
+        let currentView = 'situations';
+        let stats = {
+            completed: 0,
+            streak: 0,
+            totalTime: 0
+        };
+
+        // DOM Elements
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        const characterBtns = document.querySelectorAll('.character-btn');
+        const expressionBtns = document.querySelectorAll('.expression-btn');
+        const situationsList = document.getElementById('situationsList');
+        const savedList = document.getElementById('savedList');
+        const characterSection = document.getElementById('characterSection');
+        const simulationArea = document.getElementById('simulationArea');
+        const progressSection = document.getElementById('progressSection');
+        const introSection = document.getElementById('introSection');
+        const statsBar = document.getElementById('statsBar');
+
+        // Initialize
+        function init() {
+            loadStats();
+            loadSavedSituations();
+            updateStatsDisplay();
+            showIntro(); // Show intro by default
+            
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', () => selectCategory(tab.dataset.category));
+            });
+
+            characterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    characterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedCharacter = btn.dataset.character;
+                    updateCharacterDisplay();
+                });
+            });
+
+            expressionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    expressionBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedExpression = btn.dataset.expression;
+                });
+            });
+        }
+
+        function showIntro() {
+            introSection.style.display = 'block';
+            statsBar.style.display = 'none';
+            situationsList.classList.remove('active');
+            savedList.classList.remove('active');
+            characterSection.classList.add('hidden');
+            simulationArea.classList.add('hidden');
+            progressSection.classList.add('hidden');
+            document.querySelector('.view-toggle').style.display = 'none';
+            document.getElementById('resetSection').style.display = 'block';
+        }
+
+        function hideIntro() {
+            introSection.style.display = 'none';
+            statsBar.style.display = 'flex';
+            document.querySelector('.view-toggle').style.display = 'flex';
+            document.getElementById('resetSection').style.display = 'block';
+        }
+
+        function resetAllData() {
+            if (confirm('האם את בטוחה שברצונך למחוק את כל הנתונים ולהתחיל מחדש?\n\nפעולה זו תמחק:\n• את כל הסטטיסטיקות\n• את הרשימה השמורה\n• את היסטוריית האימונים')) {
+                // Clear all data
+                localStorage.removeItem('faithSimStats');
+                localStorage.removeItem('faithSimSaved');
+                
+                // Reset state
+                stats = { completed: 0, streak: 0, totalTime: 0 };
+                savedSituations = [];
+                completedSituations = [];
+                
+                // Update display
+                updateStatsDisplay();
+                
+                alert('כל הנתונים נמחקו בהצלחה! ✨\nמתחילים מחדש...');
+                
+                // Stay on intro
+                showIntro();
+            }
+        }
+
+        function loadStats() {
+            const saved = localStorage.getItem('faithSimStats');
+            if (saved) {
+                stats = JSON.parse(saved);
+            }
+        }
+
+        function saveStats() {
+            localStorage.setItem('faithSimStats', JSON.stringify(stats));
+        }
+
+        function loadSavedSituations() {
+            const saved = localStorage.getItem('faithSimSaved');
+            if (saved) {
+                savedSituations = JSON.parse(saved);
+            }
+        }
+
+        function saveSavedSituations() {
+            localStorage.setItem('faithSimSaved', JSON.stringify(savedSituations));
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('completedCount').textContent = stats.completed;
+            document.getElementById('streakCount').textContent = stats.streak;
+            document.getElementById('totalTime').textContent = stats.totalTime;
+        }
+
+        function switchView(view) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === view);
+            });
+
+            // Remove active from intro tab when switching views
+            document.querySelector('.intro-tab').classList.remove('active');
+            hideIntro();
+
+            if (view === 'situations') {
+                situationsList.classList.add('active');
+                savedList.classList.remove('active');
+                if (currentCategory) {
+                    showSituationsList(currentCategory);
+                } else {
+                    situationsList.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 20px;">בחרי קטגוריה מהלשוניות למעלה</p>';
+                }
+            } else {
+                situationsList.classList.remove('active');
+                savedList.classList.add('active');
+                showSavedList();
+            }
+
+            characterSection.classList.add('hidden');
+            simulationArea.classList.add('hidden');
+            progressSection.classList.add('hidden');
+        }
+
+        function selectCategory(category) {
+            categoryTabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.category === category);
+            });
+
+            if (category === 'intro') {
+                showIntro();
+                return;
+            }
+
+            hideIntro();
+            currentCategory = category;
+            
+            if (currentView === 'situations') {
+                showSituationsList(category);
+            }
+        }
+
+        function showSituationsList(category) {
+            const situations = situationsDB[category];
+            situationsList.innerHTML = '';
+            
+            situations.forEach((sit, index) => {
+                const isCompleted = completedSituations.includes(sit.id);
+                const isSaved = savedSituations.some(s => s.id === sit.id);
+                const item = document.createElement('div');
+                item.className = `situation-item ${isCompleted ? 'completed' : ''}`;
+                item.innerHTML = `
+                    <div class="item-title">${isCompleted ? '✅ ' : ''}${isSaved ? '💾 ' : ''}${sit.title}</div>
+                    <div class="item-preview">${sit.desc}</div>
+                `;
+                item.addEventListener('click', () => selectSituation(sit, index, category));
+                situationsList.appendChild(item);
+            });
+
+            situationsList.classList.add('active');
+            characterSection.classList.add('hidden');
+            simulationArea.classList.add('hidden');
+            progressSection.classList.add('hidden');
+        }
+
+        function showSavedList() {
+            savedList.innerHTML = '';
+
+            if (savedSituations.length === 0) {
+                savedList.innerHTML = `
+                    <div class="saved-empty">
+                        <div class="icon">📑</div>
+                        <p>אין מצבים שמורים עדיין</p>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">לחצי על כפתור השמירה בזמן אימון כדי לשמור</p>
+                    </div>
+                `;
+                return;
+            }
+
+            savedSituations.forEach((sit, index) => {
+                const isCompleted = completedSituations.includes(sit.id);
+                const item = document.createElement('div');
+                item.className = `situation-item saved-item ${isCompleted ? 'completed' : ''}`;
+                item.innerHTML = `
+                    <div class="item-title">${isCompleted ? '✅ ' : ''}${sit.title}</div>
+                    <div class="item-preview">${sit.desc}</div>
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteSavedSituation(${index})">✕</button>
+                `;
+                item.addEventListener('click', () => selectSituation(sit, index, sit.category));
+                savedList.appendChild(item);
+            });
+
+            savedList.classList.add('active');
+        }
+
+        function saveSituation() {
+            if (!currentSituation) return;
+
+            const alreadySaved = savedSituations.some(s => s.id === currentSituation.id);
+            if (alreadySaved) {
+                alert('המצב הזה כבר שמור ברשימה!');
+                return;
+            }
+
+            const sitToSave = { ...currentSituation, category: currentCategory };
+            savedSituations.push(sitToSave);
+            saveSavedSituations();
+            
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '✅ נשמר!';
+            saveBtn.style.background = 'linear-gradient(135deg, var(--mint) 0%, #8DD4BE 100%)';
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = '💾 שמור לרשימה';
+                saveBtn.style.background = '';
+            }, 2000);
+        }
+
+        function deleteSavedSituation(index) {
+            if (confirm('למחוק את המצב מהרשימה השמורה?')) {
+                savedSituations.splice(index, 1);
+                saveSavedSituations();
+                showSavedList();
+            }
+        }
+
+        function selectSituation(situation, index, category) {
+            currentSituation = situation;
+            currentSituationIndex = index;
+            currentCategory = category || currentCategory;
+            
+            situationsList.classList.remove('active');
+            savedList.classList.remove('active');
+            characterSection.classList.remove('hidden');
+            simulationArea.classList.remove('hidden');
+            progressSection.classList.remove('hidden');
+
+            // Update situation display
+            document.getElementById('situationTitle').textContent = situation.title;
+            document.getElementById('situationDesc').textContent = situation.desc;
+            document.getElementById('stressText').textContent = situation.stressText;
+            document.getElementById('faithResponse').textContent = situation.faithResponse;
+            document.getElementById('verseText').textContent = situation.verse;
+            document.getElementById('verseSource').textContent = situation.source;
+
+            // Handle second character
+            const secondChar = document.getElementById('secondCharacter');
+            if (situation.characters === 2) {
+                secondChar.classList.remove('hidden');
+            } else {
+                secondChar.classList.add('hidden');
+            }
+
+            // Reset UI
+            resetTrainingUI();
+            updateProgress();
+        }
+
+        function resetTrainingUI() {
+            document.getElementById('startBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('responseSection').classList.add('hidden');
+            document.getElementById('timerNumber').textContent = '6';
+            document.getElementById('timerCircle').style.setProperty('--progress', '0%');
+            
+            const mainChar = document.getElementById('mainCharacter');
+            mainChar.classList.remove('calm');
+            mainChar.classList.add('stressed');
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+        }
+
+        function updateCharacterDisplay() {
+            document.getElementById('mainCharacter').textContent = selectedCharacter;
+        }
+
+        function updateProgress() {
+            const total = situationsDB[currentCategory].length;
+            const completed = situationsDB[currentCategory].filter(s => completedSituations.includes(s.id)).length;
+            const percent = (completed / total) * 100;
+            
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('progressNum').textContent = completed;
+            document.getElementById('progressTotal').textContent = total;
+        }
+
+        function startTraining() {
+            document.getElementById('startBtn').classList.add('hidden');
+            let timeLeft = 6;
+            
+            const timerNumber = document.getElementById('timerNumber');
+            const timerCircle = document.getElementById('timerCircle');
+            const mainChar = document.getElementById('mainCharacter');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerNumber.textContent = timeLeft;
+                const progress = ((6 - timeLeft) / 6) * 100;
+                timerCircle.style.setProperty('--progress', `${progress}%`);
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('nextBtn').classList.remove('hidden');
+                    mainChar.classList.remove('stressed');
+                    mainChar.classList.add('calm');
+                }
+            }, 1000);
+        }
+
+        function showResponse() {
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('responseSection').classList.remove('hidden');
+            
+            // Mark as completed
+            if (!completedSituations.includes(currentSituation.id)) {
+                completedSituations.push(currentSituation.id);
+                stats.completed++;
+                stats.totalTime += 1;
+                saveStats();
+                updateStatsDisplay();
+            }
+            
+            updateProgress();
+        }
+
+        function repeatTraining() {
+            resetTrainingUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSituation() {
+            const situations = situationsDB[currentCategory];
+            currentSituationIndex = (currentSituationIndex + 1) % situations.length;
+            selectSituation(situations[currentSituationIndex], currentSituationIndex);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
